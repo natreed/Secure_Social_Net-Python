@@ -27,9 +27,9 @@ class CLClient(object):
         self.current_room = None
         #default dict allows appending to lists directly
         self.other_rooms_messages = defaultdict(list)
-        for room in self.client.rooms.keys():
-            self.other_rooms_messages[room] = []
-        self.other_rooms_messages['blue_wave'] = []
+        for room in self.client.rooms.values():
+            room.set_room_name(room.display_name.split(':')[0].lstrip('#'))
+            self.other_rooms_messages[room.display_name] = []
 
         # for room in self.client.rooms.values():
         # room.add_listener(on_message)
@@ -43,11 +43,11 @@ class CLClient(object):
         elif event['type'] == "m.room.message":
             if event['content']['msgtype'] == "m.text":
                 if room.display_name == self.current_room.display_name:
-                    print("{0}: {1}: {2}".format(room.display_name, event['sender'], event['content']['body']))
-                # else:
-                #     self.other_rooms_messages[room.display_name].append("{0}: {1}: {2}"
-                #                                                         .format(room.display_name, event['sender'],
-                #                                                                 event['content']['body']))
+                    print("{0}: {1}: {2}".format(room.name, event['sender'], event['content']['body']))
+                else:
+                    self.other_rooms_messages[room.name].append("{0}: {1}: {2}"
+                                                                        .format(room.name, event['sender'],
+                                                                                event['content']['body']))
         else:
             print(event['type'])
         return
