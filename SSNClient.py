@@ -1,10 +1,4 @@
-import sys
-from subprocess import call
-from matrix_client.api import MatrixRequestError
-
 from collections import defaultdict
-from Wall import Wall
-import json
 from SSN_element import SSN_element
 
 
@@ -18,15 +12,13 @@ class SSNClient(SSN_element):
         # default dict allows appending to lists directly
         self.other_rooms_messages = defaultdict(list)
 
-        for room in self.m_client.rooms.values():
-            room.set_room_name(room.display_name.split(':')[0].lstrip('#'))
-            self.other_rooms_messages[room.display_name] = []
-
-    def show_rooms(self):
-        for room in self.m_client.rooms.values():
-            print(room.display_name)
-
     def add_post(self, room, event):
+        """
+        Post to current room.
+        :param room:
+        :param event:
+        :return:
+        """
         if event['content']['msgtype'] == "m.text":
             if room.display_name == self.current_room.display_name:
                 print("{0}: {1}: {2}".format(room.name, event['sender'], event['content']['body']))

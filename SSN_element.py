@@ -13,13 +13,28 @@ class SSN_element(object):
         # default dict allows appending to lists directly
         self.other_rooms_messages = defaultdict(list)
 
+        # TODO: NOT YET IMPLEMENTED list of visited rooms appended to each time a room is joined.
+        # when client leaves room we can pop() and join the previous room on the list.
+        self.rooms_visited = []
+
+        for room in self.m_client.rooms.values():
+            room.set_room_name(room.display_name.split(':')[0].lstrip('#'))
+            self.other_rooms_messages[room.display_name] = []
+
     @classmethod
     def on_message(cls, room, event):
         raise NotImplementedError
 
     @classmethod
-    def add_post(cls, room, event):
+    def add_post(cls, **kwargs):
         raise NotImplementedError
+
+    def load(self):
+        self.join_room(self.current_room.room_id)
+
+    def show_rooms(self):
+        for room in self.m_client.rooms.values():
+            print(room.display_name)
 
     def add_friend(self, user_id):
         if user_id not in self.friends.keys():

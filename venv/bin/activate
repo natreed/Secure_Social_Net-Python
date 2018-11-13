@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/nathanreed/Desktop/matrix_python/venv"
+VIRTUAL_ENV="/Users/nathanreed/Desktop/SecSocNet/matrix-experimentation/matrix_python/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
