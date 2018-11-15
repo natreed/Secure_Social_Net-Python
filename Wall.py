@@ -79,8 +79,8 @@ class Wall(SSN_element):
                     self.render(self.m_client)
                     self.post_id += 1
                 elif "comment" in msg_dict.keys():
-                    msg = msg_dict['comment']
-                    self.post_comment(msg_dict['post_id'], msg)
+
+                    self.post_comment(msg_dict['post_id'], msg_dict['comment'])
             else:
                 # print(msg_body) #printing all the messages can be good for debugging
                 return
@@ -106,10 +106,9 @@ class Wall(SSN_element):
         """
         self.posts[post_id].print(self.m_client)
         room = self.join_room(self.posts[post_id].room_id)
-
         room.send_text('-\t{0}'.format(msg))
 
-        self.join_room(self.posts[post_id].room_id)
+
 
     def invite_friend(self, user_name):
         """friends will be able to see the Wall"""

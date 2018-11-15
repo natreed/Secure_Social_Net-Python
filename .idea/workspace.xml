@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="df2a480a-b099-4c77-93a5-fe3e93dec6b9" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/Stores/Wall_Store.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SSN.py" beforeDir="false" afterPath="$PROJECT_DIR$/SSN.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SSN_element.py" beforeDir="false" afterPath="$PROJECT_DIR$/SSN_element.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Stores/Wall_Store.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Wall.py" beforeDir="false" afterPath="$PROJECT_DIR$/Wall.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/script_tests/loadingWallFromStore.txt" beforeDir="false" afterPath="$PROJECT_DIR$/script_tests/loadingWallFromStore.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,11 +21,11 @@
     <splitter split-orientation="horizontal" split-proportion="0.47663552">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="Wall.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="Wall.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Wall.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="225">
-                  <caret line="15" column="37" selection-start-line="15" selection-start-column="37" selection-end-line="15" selection-end-column="37" />
+                <state relative-caret-position="95">
+                  <caret line="108" selection-start-line="108" selection-end-line="108" />
                   <folding>
                     <element signature="e#0#35#0" expanded="true" />
                     <element signature="e#3348#3427#0" />
@@ -50,6 +46,15 @@
               </provider>
             </entry>
           </file>
+          <file leaf-file-name="loadingWallFromStore.txt" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/script_tests/loadingWallFromStore.txt">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="90">
+                  <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+                </state>
+              </provider>
+            </entry>
+          </file>
         </leaf>
       </split-first>
       <split-second>
@@ -57,7 +62,7 @@
           <file leaf-file-name="SSN.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/SSN.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-790">
+                <state relative-caret-position="-565">
                   <caret line="61" column="28" selection-start-line="61" selection-start-column="28" selection-end-line="61" selection-end-column="28" />
                   <folding>
                     <element signature="e#365#375#0" expanded="true" />
@@ -103,7 +108,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>format</find>
       <find>Room ID/Alias in the wrong format</find>
       <find>room.add_listener</find>
       <find>{0}: {1}</find>
@@ -133,6 +137,7 @@
       <find>Wall</find>
       <find>listener</find>
       <find>clear</find>
+      <find>render</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -155,10 +160,10 @@
         <option value="$PROJECT_DIR$/Stores/Wall_Store.json" />
         <option value="$PROJECT_DIR$/Stores/Wall_Store.pkl" />
         <option value="$PROJECT_DIR$/Stores/Wall_Store.txt" />
-        <option value="$PROJECT_DIR$/script_tests/loadingWallFromStore.txt" />
         <option value="$PROJECT_DIR$/SSN_element.py" />
         <option value="$PROJECT_DIR$/SSN.py" />
         <option value="$PROJECT_DIR$/Wall.py" />
+        <option value="$PROJECT_DIR$/script_tests/loadingWallFromStore.txt" />
       </list>
     </option>
   </component>
@@ -336,14 +341,14 @@
       <window_info anchor="bottom" id="Run" order="2" weight="0.32139304" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32916668" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.33125" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.33125" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14536741" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32916668" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.425" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.425" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -361,18 +366,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Wall.py</url>
-          <line>111</line>
-          <option name="timeStamp" value="241" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Wall.py</url>
-          <line>109</line>
-          <option name="timeStamp" value="242" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -646,13 +639,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/script_tests/loadingWallFromStore.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_bundle/pydev_console_utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="137">
@@ -682,7 +668,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/SSN.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-790">
+        <state relative-caret-position="-565">
           <caret line="61" column="28" selection-start-line="61" selection-start-column="28" selection-end-line="61" selection-end-column="28" />
           <folding>
             <element signature="e#365#375#0" expanded="true" />
@@ -694,12 +680,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Wall.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="37" selection-start-line="15" selection-start-column="37" selection-end-line="15" selection-end-column="37" />
+        <state relative-caret-position="95">
+          <caret line="108" selection-start-line="108" selection-end-line="108" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
             <element signature="e#3348#3427#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/script_tests/loadingWallFromStore.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
         </state>
       </provider>
     </entry>
