@@ -32,6 +32,11 @@ class SSN_element(object):
     def load(self):
         self.join_room(self.current_room.room_id)
 
+    def leave(self):
+        """TODO: This is just a placeholder for now.
+        This func may not be necessary"""
+        return
+
     def show_rooms(self):
         for room in self.m_client.rooms.values():
             print(room.display_name)

@@ -12,6 +12,7 @@
 # 12 - Couldn't find room.
 
 import sys
+import os
 from subprocess import call
 from enum import Enum
 from matrix_client.client import MatrixClient
@@ -20,11 +21,8 @@ from requests.exceptions import MissingSchema
 from SSNClient import SSNClient
 import json
 from Wall import Wall
-
-
-class ElementType(Enum):
-    CHAT_CLIENT = 1
-    WALL = 2
+import pickle
+import copy
 
 
 class SSN(object):
@@ -34,6 +32,16 @@ class SSN(object):
         # Wall and chat client hold state for themselves respectively.
         # They share a common base class, 'ssn_element'
         self.wall = self.start_wall()
+        """Thsi is cool. Wall store stores the state, so if we want to see a friend's wall, we can have 
+        them send us their wall state and build it for ourselves."""
+        if os.stat("./Stores/Wall_Store.txt").st_size != 0:
+            with open('Stores/Wall_Store.txt') as json_file:
+                # raw_data = json_file.read()
+                # wall_store = pickle.loads(raw_data) # deserialization
+                wall_store = json.load(json_file)
+                self.wall.initialize_from_file(wall_store["friends"],
+                                               wall_store["posts"])
+
         self.chat_client = self.start_ssn_client()
         """Current interface is the context/interface of the current 'ssn_element'.
         The chat client is the base context. To access any other context element
@@ -47,13 +55,15 @@ class SSN(object):
 
     def render_wall(self):
         self.current_interface = self.wall
-        call('clear')
-        self.current_interface.load()
-        print("Welcome to my wall!")
+        # call('clear')
+        username = self.m_client.user_id.split(':')[0][1:]
+        print("Welcome to {0}'s wall!".format(username))
+        if self.wall.current_room == None:
+            self.wall.load()
 
     def render_client(self):
         self.current_interface = self.chat_client
-        call('clear')
+        # call('clear')
         self.current_interface.join_room(self.current_interface.current_room.room_id)
         print("Welcome back to the client!")
 
@@ -61,7 +71,9 @@ class SSN(object):
         return SSNClient(self.m_client)
 
     def start_wall(self):
-        return Wall(self.m_client)
+        wall = Wall(self.m_client)
+        wall.load()
+        return wall
 
     def login(self, username, password):
         try:
@@ -84,17 +96,17 @@ class SSN(object):
         cmd = args.pop(0).lstrip('/')
         if cmd == "q":
             # TODO: Right now, q is how to switch from wall context back to base
-            if self.onWall:
+            if self.current_interface == self.wall:
                 self.render_client()
                 return
             else:
+                self.wall.leave()  # stores wall state
                 print("Goodbye")
                 sys.exit(0)
-        # this is the transition to the wall context
-        if cmd == "show_wall" or cmd == "sw":
+        # TODO: This is going to get messy if we add other SSN elements.
+        elif cmd == "sw" or cmd == 'show_wall':
             self.render_wall()
-            return
-        if self.current_interface == self.wall:
+        if self.current_interface == self.wall or cmd:
             self.wall_input_handler(cmd, args)
         else:
             self.client_input_handler(cmd, args)
@@ -108,7 +120,7 @@ class SSN(object):
         elif cmd == "invite_friend" or cmd == 'i':
             self.current_interface.add_friend(' '.join(args))
         else:
-            print("{0} has no implementation".format(cmd))
+            print("{0} has no implementation in chat service client".format(cmd))
 
     def wall_input_handler(self, cmd, args):
         # TODO: For initial develpment only allow viewing self.wall
@@ -120,6 +132,15 @@ class SSN(object):
         elif cmd == "post" or cmd == "p":
             data = {"add_post": ' '.join(args)}
             self.current_interface.current_room.send_text(json.dumps(data))
+        elif cmd == "pc" or cmd == "comment":
+            """post comment takes 2 args (post_id, comment)
+                    for example <pc 2 give me a break"""
+            id = args.pop(0)
+            if id.isdigit():
+                data = {"comment": ' '.join(args), "post_id": id}
+                self.current_interface.current_room.send_text(json.dumps(data))
+            else:
+                print("The second argument must be an id <integer value>")
         else:
             print(format("Did not recognize the command: {0}").format(cmd))
 
