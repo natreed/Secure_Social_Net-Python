@@ -1,0 +1,58 @@
+digraph "classes" {
+charset="utf-8"
+rankdir=BT
+"0" [label="{CACHE|\l|}", shape="record"];
+"1" [label="{CaseInsensitiveDict|\l|copy()\llower_items()\l}", shape="record"];
+"2" [label="{Condition|acquire\lnotifyAll\lrelease\l|notify()\lnotify_all()\lwait()\lwait_for()\l}", shape="record"];
+"3" [label="{Event|isSet\l|clear()\lis_set()\lset()\lwait()\l}", shape="record"];
+"4" [label="{MatrixClient|api\lbad_sync_timeout_limit : int\lephemeral_listeners : list\lhs\linvite_listeners : list\lleft_listeners : list\llisteners : list\lpresence_listeners : dict\lrooms : dict\lshould_listen : bool\lsync_filter : str\lsync_thread : NoneType\lsync_token : NoneType\ltoken\luser_id : NoneType\l|add_ephemeral_listener()\ladd_invite_listener()\ladd_leave_listener()\ladd_listener()\ladd_presence_listener()\lcreate_room()\lget_rooms()\lget_sync_token()\lget_user()\ljoin_room()\llisten_for_events()\llisten_forever()\llogin()\llogin_with_password()\llogin_with_password_no_sync()\llogout()\lregister_as_guest()\lregister_with_password()\lremove_ephemeral_listener()\lremove_listener()\lremove_presence_listener()\lremove_room_alias()\lset_sync_token()\lset_user_id()\lstart_listener_thread()\lstop_listener_thread()\lupload()\l}", shape="record"];
+"5" [label="{MatrixHttpApi|base_url\ldefault_429_wait_ms : int\lidentity : NoneType\lsession\ltoken : NoneType\ltxn_id : int\lvalidate_cert : bool\l|add_user_tag()\lban_user()\lclaim_keys()\lcreate_filter()\lcreate_room()\ldelete_device()\ldelete_devices()\levent_stream()\lforget_room()\lget_avatar_url()\lget_device()\lget_devices()\lget_display_name()\lget_download_url()\lget_emote_body()\lget_filter()\lget_membership()\lget_power_levels()\lget_room_id()\lget_room_members()\lget_room_messages()\lget_room_name()\lget_room_state()\lget_room_topic()\lget_text_body()\lget_user_tags()\linitial_sync()\linvite_user()\ljoin_room()\lkey_changes()\lkick_user()\lleave_room()\llogin()\llogout()\lmedia_upload()\lquery_keys()\lredact_event()\lregister()\lremove_room_alias()\lremove_user_tag()\lsend_content()\lsend_emote()\lsend_location()\lsend_message()\lsend_message_event()\lsend_notice()\lsend_state_event()\lsend_to_device()\lset_account_data()\lset_avatar_url()\lset_display_name()\lset_guest_access()\lset_join_rule()\lset_membership()\lset_power_levels()\lset_room_account_data()\lset_room_alias()\lset_room_name()\lset_room_topic()\lsync()\lunban_user()\lupdate_device_info()\lupload_keys()\lvalidate_certificate()\l}", shape="record"];
+"6" [label="{OrderedDict|\l|move_to_end()\l}", shape="record"];
+"7" [label="{RLock|\l|acquire()\lrelease()\l}", shape="record"];
+"8" [label="{RequestsCookieJar|\l|copy()\lget()\lget_dict()\lget_policy()\litems()\literitems()\literkeys()\litervalues()\lkeys()\llist_domains()\llist_paths()\lmultiple_domains()\lset()\lset_cookie()\lupdate()\lvalues()\l}", shape="record"];
+"9" [label="{SSN|chat_client\lcurrent_interface\llanding_room\lm_client\lwall\l|client_input_handler()\linput_controller()\llisten()\llogin()\lremove_empty_rooms()\lrender_client()\lrender_wall()\lrun()\lstart_ssn_client()\lstart_wall()\lwall_input_handler()\l}", shape="record"];
+"10" [label="{SSNClient|current_room\lother_rooms_messages\lrendered : bool\l|on_message()\lsend_wall_image()\l}", shape="record"];
+"11" [label="{SSNRoom|msg_store : list\lroom\lroom_type : NoneType\l|leave_room()\lset_room_name()\l}", shape="record"];
+"12" [label="{Session|adapters\lauth : NoneType\lcert : NoneType\lcookies : NoneType\lheaders\lhooks\lmax_redirects : int\lparams : dict\lproxies : dict\lstream : bool\ltrust_env : bool\lverify : bool\l|close()\ldelete()\lget()\lget_adapter()\lhead()\lmerge_environment_settings()\lmount()\loptions()\lpatch()\lpost()\lprepare_request()\lput()\lrequest()\lsend()\l}", shape="record"];
+"13" [label="{TextIOWrapper|\l|close()\ldetach()\lfileno()\lflush()\lisatty()\lread()\lreadable()\lreadline()\lreadlines()\lreconfigure()\lseek()\lseekable()\ltell()\ltruncate()\lwritable()\lwrite()\lwritelines()\l}", shape="record"];
+"14" [label="{Thread|daemon\ldaemon : bool\lident\lisAlive\lname\lname\l|getName()\lisDaemon()\lis_alive()\ljoin()\lrun()\lsetDaemon()\lsetName()\lstart()\l}", shape="record"];
+"15" [label="{Wall|current_event_id : NoneType\lcurrent_room\lfriends : dict\linitialized : bool\lis_room_setup : bool\lpost_id : int\lposts\lrendered : bool\l|add_post()\linitialize_from_file()\linvite()\linvite_friend()\lload()\lon_message()\lpost_comment()\lremove_post()\lrender()\lupdate_wall_store()\l}", shape="record"];
+"16" [label="{_RLock|\l|acquire()\lrelease()\l}", shape="record"];
+"17" [label="{defaultdict|default_factory : NoneType\l|}", shape="record"];
+"18" [label="{deque|iterable : list\lmaxlen : int\l|append()\lappendleft()\lclear()\lcopy()\lcount()\lextend()\lextendleft()\lindex()\linsert()\lpop()\lpopleft()\lremove()\lreverse()\lrotate()\l}", shape="record"];
+"0" -> "4" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="_cache_level", style="solid"];
+"0" -> "4" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="_cache_level", style="solid"];
+"1" -> "12" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="headers", style="solid"];
+"2" -> "3" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="_cond", style="solid"];
+"3" -> "14" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="_started", style="solid"];
+"4" -> "9" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="m_client", style="solid"];
+"5" -> "4" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="api", style="solid"];
+"6" -> "1" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="_store", style="solid"];
+"6" -> "12" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="adapters", style="solid"];
+"6" -> "15" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="posts", style="solid"];
+"7" -> "2" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="_lock", style="solid"];
+"7" -> "8" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="_cookies_lock", style="solid"];
+"8" -> "12" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="cookies", style="solid"];
+"10" -> "9" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="chat_client", style="solid"];
+"10" -> "9" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="current_interface", style="solid"];
+"10" -> "9" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="current_interface", style="solid"];
+"11" -> "10" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="current_room", style="solid"];
+"11" -> "10" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="current_room", style="solid"];
+"11" -> "10" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="current_room", style="solid"];
+"11" -> "15" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="current_room", style="solid"];
+"11" -> "15" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="current_room", style="solid"];
+"11" -> "15" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="current_room", style="solid"];
+"11" -> "15" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="current_room", style="solid"];
+"11" -> "15" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="current_room", style="solid"];
+"11" -> "15" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="current_room", style="solid"];
+"11" -> "15" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="current_room", style="solid"];
+"12" -> "5" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="session", style="solid"];
+"13" -> "14" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="_stderr", style="solid"];
+"14" -> "4" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="sync_thread", style="solid"];
+"15" -> "9" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="wall", style="solid"];
+"15" -> "9" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="current_interface", style="solid"];
+"16" -> "2" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="_lock", style="solid"];
+"16" -> "8" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="_cookies_lock", style="solid"];
+"17" -> "10" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="other_rooms_messages", style="solid"];
+"18" -> "2" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="_waiters", style="solid"];
+}
