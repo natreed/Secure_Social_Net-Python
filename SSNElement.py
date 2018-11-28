@@ -1,6 +1,7 @@
 import sys
 from collections import defaultdict
 from matrix_client.api import MatrixRequestError
+import time
 
 
 class SSN_element(object):
@@ -15,26 +16,27 @@ class SSN_element(object):
         # default dict allows appending to lists directly
         # a store for all the messages {room:[list of messages], ...}
         # updates occur in send_room message
-        self.all_rooms_messages = defaultdict(list)
+        self.all_rooms_messages = defaultdict(defaultdict)
+        self.loaded_rooms = {}
         self.update_room_table()
-        # TODO: NOT YET IMPLEMENTED list of visited rooms appended to each time a room is joined.
-        # when client leaves room we can pop() and join the previous room on the list.
-        self.rooms_visited = []
         self.rendered = False
         for room in self.m_client.rooms.values():
             room.set_room_name(room.display_name.split(':')[0].lstrip('#'))
-            self.all_rooms_messages[room.display_name] = []
+            self.all_rooms_messages[room.display_name] = defaultdict()
 
     @classmethod
     def on_message(cls, room, event):
         raise NotImplementedError
 
-    def load(self, **kwargs):
+    @classmethod
+    def load(cls, **kwargs):
         raise NotImplementedError
 
     def init_msg_hist_for_room(self, room_name, msg_store):
         for msg in msg_store:
-            self.all_rooms_messages[room_name].append(msg)
+            """making timestamp key should avoid duplicates"""
+            self.all_rooms_messages[room_name][time.time()] = msg
+            print(msg)
 
     def send_room_message(self, room, event, prepend=None):
         """
@@ -44,24 +46,13 @@ class SSN_element(object):
         :return:
         """
         if event['content']['msgtype'] == "m.text":
-            msg = "{0}: {1}: {2}".format(room.name, event['sender'], event['content']['body'])
+            msg = "{0}: {1}".format(event['sender'], event['content']['body'])
             if prepend:
                 msg = prepend + msg
             if self.is_room_setup and room.name == self.current_room.room.name:
                 print(msg)
 
-            self.all_rooms_messages[room.name].append(msg)
-
-
-
-
-    def wrap(self, callback):
-        return callback
-
-    def update_wall_store(self):
-        """TODO: This is just a placeholder for now.
-        This func may not be necessary"""
-        return
+            self.all_rooms_messages[room.name][time.time] = "\t" + msg
 
     def show_rooms(self):
         for room in self.m_client.rooms.values():
@@ -97,9 +88,8 @@ class SSN_element(object):
                 room.set_room_name(prepend + room.name)
             room.backfill_previous_messages()
             self.is_room_setup = True
-            for event in room.events:
-                if event['type'] == 'm.room.message' and event['content']['msgtype'] == "m.text":
-                    print("{0}: {1}: {2}".format(room.name, event['sender'], event['content']['body']))
+            for msg in self.all_rooms_messages[room.name].values():
+                print(msg)
             room.add_listener(self.on_message)
 
         except MatrixRequestError as e:
