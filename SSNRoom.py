@@ -15,7 +15,6 @@ class SSNRoom(object):
         record. The wall record will be a json object stored in a room event in the
         wall point of entry room."""
         self.room = room
-        self.room_type = None
         self.msg_store = []
         """"""
         for index, e in enumerate(self.room.get_events()):

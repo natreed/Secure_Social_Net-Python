@@ -17,12 +17,12 @@ class SSNElement:
         # default dict allows appending to lists directly
         # a store for all the messages {room:[list of messages], ...}
         # updates occur in send_room message
-        self.all_rooms_messages = defaultdict(defaultdict)
+        self.all_rooms_messages = defaultdict(list)
+        # reference room objects by room_id
         self.loaded_rooms = {}
+        # lookup table of room names to room_id's
         self.update_room_table()
         self.rendered = False
-
-
 
     @classmethod
     def on_message(cls, room, event):
@@ -33,9 +33,10 @@ class SSNElement:
         raise NotImplementedError
 
     def init_msg_hist_for_room(self, room_name, msg_store):
+        self.all_rooms_messages[room_name] = []
         for msg in msg_store:
             """making timestamp key should avoid duplicates"""
-            self.all_rooms_messages[room_name][time.time()] = msg
+            self.all_rooms_messages[room_name].append(msg)
             print(msg)
 
     def send_room_message(self, room, event, prepend=None):
@@ -44,6 +45,8 @@ class SSNElement:
         :param event:
         :param prepend:
         :return:
+
+        TODO: Make add time stamp to messages. Turn all rooms messages into dict instead of list. "time:msg
         """
         if event['content']['msgtype'] == "m.text":
             msg = "{0}: {1}".format(event['sender'], event['content']['body'])
@@ -51,8 +54,7 @@ class SSNElement:
                 msg = prepend + msg
             if self.is_room_setup and room.name == self.current_room.room.name:
                 print(msg)
-
-            self.all_rooms_messages[room.name][time.time] = "\t" + msg
+            self.all_rooms_messages[room.name].append("\t" + msg)
 
     def show_rooms(self):
         for room in self.m_client.rooms.values():
@@ -70,7 +72,7 @@ class SSNElement:
 
     def update_room_table(self):
         for id, room in self.m_client.rooms.items():
-            self.room_table[room.name] = id
+            self.room_table[room.name] = {"room_id": id, "joined": False}
 
     def join_room(self, room_id_alias=None, print_room=True):
         """
@@ -87,7 +89,7 @@ class SSNElement:
                 print("CURRENT ROOM: {}".format(room.name.upper()))
             room.backfill_previous_messages()
             self.is_room_setup = True
-            for msg in self.all_rooms_messages[room.name].values():
+            for msg in self.all_rooms_messages[room.name]:
                 print(msg)
             room.add_listener(self.on_message)
 

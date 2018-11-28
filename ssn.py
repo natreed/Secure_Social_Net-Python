@@ -29,7 +29,8 @@ class ssn():
     def __init__(self, host, username, password, landing_room):
         self.m_client = MatrixClient(host)
         self.login(username, password)
-        self.remove_empty_rooms(self.m_client)
+        # for cleanup of orphaned and abandoned rooms
+        # self.remove_empty_rooms(self.m_client)
         self.chat_landing_room = landing_room
         self.wall_landing_room = "#{}_w:matrix.org".format(username.split(':')[0][1:])
         # make sure rooms have names
@@ -152,8 +153,10 @@ class ssn():
         :return:
         """
         for room_id, room in MatrixClient.rooms.items():
-            if len(room.aliases) == 0:
-                MatrixClient.api.leave_room(room.room_id)
+            if len(room.aliases) != 0:
+                alias = room.aliases[0].split(':')[0][1:]
+                if alias.startswith('#'):
+                    MatrixClient.api.leave_room(room.room_id)
         return MatrixClient
 
     def wall_input_handler(self, cmd, args):
@@ -192,14 +195,17 @@ class ssn():
             print(format("Did not recognize the command: {0}").format(cmd))
 
     def listen(self):
+
         while True:
-            msg = input()
-            sleep(.1)
-            # print(msg)
-            if msg.startswith('/'):
-                self.input_controller(msg)
-            else:
-                self.current_interface.current_room.room.send_text(msg)
+            # Spin wait if there is no room ready for input
+            if self.current_interface.current_room:
+                msg = input()
+                sleep(.1)
+                # print(msg)
+                if msg.startswith('/'):
+                    self.input_controller(msg)
+                else:
+                    self.current_interface.current_room.room.send_text(msg)
 
     def run(self):
         self.current_interface.load(self.chat_landing_room)

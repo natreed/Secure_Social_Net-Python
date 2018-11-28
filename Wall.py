@@ -22,8 +22,7 @@ class Wall(SSNElement):
 
         for key, post in saved_posts.items():
             room_id_alias = post["room_id"]
-            self.add_post(post["msg"], room_id_alias, self.post_id)
-            #self.posts[self.post_id].load_post_room(self.load_post_to_room_callback)
+            self.add_post(post["msg"], room_id_alias, self.post_id, post["room_name"])
             self.post_id += 1
 
         self.initialized = True
@@ -35,19 +34,25 @@ class Wall(SSNElement):
         user_name = user_id.split(':')[0][1:]
         wall_handle = user_name + "_w"
         room_name = self.landing_room.split(':')[0][1:]
-        # TODO: COMMEMT OUT THIS LINE
+        # TODO: COMMENT OUT THIS LINE IMMEDIATELY
         # self.remove_all_posts()
 
-        if wall_handle in self.loaded_rooms.keys():
-            self.current_room = self.loaded_rooms[room_name]
-            for msg in self.all_rooms_messages[room_name].values():
-                print(msg)
-        elif room_name in self.room_table:
-            self.current_room = WallRoom(self.join_room(self.landing_room), self.init_msg_hist_for_room)
-            self.loaded_rooms[self.current_room.get_room_name()] = self.current_room
+        if room_name in self.room_table:
+            room_id = self.room_table[room_name]["room_id"]
+            if room_id in self.loaded_rooms.keys():
+                self.current_room = self.loaded_rooms[room_id]
+                for msg in self.all_rooms_messages[room_name]:
+                    print(msg)
+            else:
+                self.current_room = WallRoom(self.join_room(self.landing_room), self.init_msg_hist_for_room)
+                self.loaded_rooms[room_id] = self.current_room
+                self.room_table[room_name]["loaded"] = True
         else:
             room = self.m_client.create_room(wall_handle)
+            room.set_room_name(wall_handle)
+            self.room_table[wall_handle] = {"room_id": room.room_id, "loaded": False}
             self.current_room = WallRoom(room, self.init_msg_hist_for_room)
+            self.loaded_rooms[room.room.room_id] = self.current_room
         self.initialized = True
 
     def update_wall_store(self):
@@ -57,7 +62,8 @@ class Wall(SSNElement):
         for key, post in self.posts.items():
             posts_info[key] = {"room_id": post.room_id,
                                "msg": post.message,
-                               "post_id": post.post_id}
+                               "post_id": post.post_id,
+                               "room_name": post.get_room_name()}
         state = {"friends": self.friends, "posts": posts_info}
         state_string = json.dumps(state)
         with open('./Stores/Wall_Store.txt', 'w') as outfile:
@@ -72,7 +78,8 @@ class Wall(SSNElement):
 
         if event['type'] == "m.room.member":
             if event['membership'] == "join":
-                if self.rendered and self.is_room_setup:
+                if self.rendered and self.is_room_setup \
+                        and self.current_room.get_room_id() not in self.loaded_rooms:
                     print("{0} joined".format(event['content']['displayname']))
         elif event['type'] == "m.room.message":
             msg_body = event['content']['body']
@@ -92,7 +99,7 @@ class Wall(SSNElement):
             else:
                 self.send_room_message(room, event)
         self.rendered = True
-        self.is_room_setup = False
+        # self.is_room_setup = False
 
     def post_msg(self, msg_dict):
         msg = msg_dict['add_post']
@@ -100,24 +107,28 @@ class Wall(SSNElement):
         room.set_guest_access("can_join")
         room.name = "p_{}".format(room.room_id)
         pst_room = PostRoom(room, self.init_msg_hist_for_room)
-        self.loaded_rooms[pst_room.get_room_name()] = pst_room
-        self.add_post(msg, pst_room.get_room_id(), str(self.post_id))
+        self.loaded_rooms[pst_room.get_room_id()] = pst_room
+        self.room_table[room.name]["room_id"] = pst_room.get_room_id()
+        self.add_post(msg, pst_room.get_room_id(), self.post_id, room.name)
         self.render()
         self.post_id += 1
         self.update_wall_store()
 
     def comment_post(self, event, msg_dict):
-        if not self.is_room_setup:
-            self.current_event_id = event['event_id']
-
-            post = self.posts[int(msg_dict['comment_post'])]
-            room_id_alias = post.room_id
-            room = self.join_room(room_id_alias)
-            if not post.post_room:
-                post.post_room = PostRoom(room, self.init_msg_hist_for_room)
-                self.loaded_rooms[post.post_room.get_room_name()] = post.post_room
-            self.current_room = post.post_room
-            print("Post comment here ...\n")
+        self.current_event_id = event['event_id']
+        post_id = msg_dict['comment_post']
+        post = self.posts[int(post_id)]
+        room_id_alias = post.room_id
+        room = self.join_room(room_id_alias)
+        room_name = post.room_name
+        if not post.post_room:
+            post.post_room = PostRoom(room, self.init_msg_hist_for_room)
+            self.loaded_rooms[room.room_id] = post.post_room
+            post.set_room_name(room_name)
+        self.current_room = post.post_room
+        for msg in self.all_rooms_messages[room_name]:
+            print("\t" + msg)
+        print("Post comment here ...\n")
 
     def remove_post(self, post_id):
         post = self.posts.pop(post_id)
@@ -137,8 +148,8 @@ class Wall(SSNElement):
             self.remove_post(post.post_id)
         self.update_wall_store()
 
-    def add_post(self, msg, post_room_id, post_id):
-        self.posts[post_id] = Post(post_room_id, msg, post_id)
+    def add_post(self, msg, post_room_id, post_id, room_name):
+        self.posts[post_id] = Post(post_room_id, msg, post_id, room_name)
 
     def post_comment(self, post_id):
         """
@@ -168,24 +179,38 @@ class Wall(SSNElement):
 
 
 class Post(object):
-    def __init__(self, post_room_id, msg, post_id):
+    def __init__(self, post_room_id, msg, post_id, room_name):
         """
         :param room_id:
         :param msg:
         :param post_id:
         :param client:
+
+        The post comment room is not joined until someone wants to post a comment in that room.
+        After a room is joined it is added to the loaded rooms list.
         """
         self.message = msg
         # post rooms need to be set asynchronously
         self.post_room = None
         self.post_id = post_id
         self.room_id = post_room_id
+        self.room_name = room_name
         self.user_id = None
         self.comments = []
 
     def get_room_name(self):
-        return self.post_room.get_room_name()
+        if self.post_room:
+            return self.post_room.get_room_name()
+        else:
+            return None
 
+    def set_room_name(self, name):
+        if self.post_room:
+            return self.post_room.set_room_name(name)
+        else:
+            return None
+
+    #TODO: Need to learn to work with python async library
     # load post room loads the post room asynchronously
     async def load_post_room(self, load_post_callback):
         self.post_room, self.user_id = await load_post_callback(self.room_id)
