@@ -4,6 +4,7 @@ from SSNElement import SSNElement
 import json
 from PostRoom import PostRoom
 from WallRoom import WallRoom
+import asyncio
 import time
 
 class Wall(SSNElement):
@@ -21,27 +22,12 @@ class Wall(SSNElement):
 
         for key, post in saved_posts.items():
             room_id_alias = post["room_id"]
-            try:
-
-                rm = self.join_room(room_id_alias)
-                room = PostRoom(rm, self.init_msg_hist_for_room)
-                self.add_post(post["msg"], room, self.post_id)
-            except BaseException as e:
-                print(e)
-                print("comment history was lost for this post")
-                try:
-                    self.remove_post(post["post_id"])
-                except BaseException as e:
-                    print(e)
-                    print("creating new room for post")
-                    room = PostRoom(self.m_client.create_room(room_id_alias), self.init_msg_hist_for_room)
-                    self.add_post(post["msg"], room, self.post_id)
+            self.add_post(post["msg"], room_id_alias, self.post_id)
+            #self.posts[self.post_id].load_post_room(self.load_post_to_room_callback)
             self.post_id += 1
+
         self.initialized = True
         return
-
-
-
 
     def load(self):
         # iterate through rooms to find wall
@@ -79,9 +65,6 @@ class Wall(SSNElement):
         return
 
     def on_message(self, room, event):
-        """Todo: I understand that this may cause unexplained behavior.
-        Somehow messages are being sent before the wall is initialized. I don't know why.
-        I didn't plan on dealing with asynchronous behavior in python. Possibly the debugger."""
         if event['event_id'] == self.current_event_id:
             return
         elif not self.initialized:
@@ -118,7 +101,7 @@ class Wall(SSNElement):
         room.name = "p_{}".format(room.room_id)
         pst_room = PostRoom(room, self.init_msg_hist_for_room)
         self.loaded_rooms[pst_room.get_room_name()] = pst_room
-        self.add_post(msg, pst_room, str(self.post_id))
+        self.add_post(msg, pst_room.get_room_id(), str(self.post_id))
         self.render()
         self.post_id += 1
         self.update_wall_store()
@@ -126,9 +109,14 @@ class Wall(SSNElement):
     def comment_post(self, event, msg_dict):
         if not self.is_room_setup:
             self.current_event_id = event['event_id']
-            room_id_alias = self.posts[int(msg_dict['comment_post'])].room_id
+
+            post = self.posts[int(msg_dict['comment_post'])]
+            room_id_alias = post.room_id
             room = self.join_room(room_id_alias)
-            self.current_room = PostRoom(room, self.init_msg_hist_for_room)
+            if not post.post_room:
+                post.post_room = PostRoom(room, self.init_msg_hist_for_room)
+                self.loaded_rooms[post.post_room.get_room_name()] = post.post_room
+            self.current_room = post.post_room
             print("Post comment here ...\n")
 
     def remove_post(self, post_id):
@@ -149,13 +137,8 @@ class Wall(SSNElement):
             self.remove_post(post.post_id)
         self.update_wall_store()
 
-
-    def add_post(self, msg, post_room, post_id):
-        self.posts[post_id] = Post(post_room, msg, post_id, self.m_client)
-
-    def invite(self, user_id, handle):
-        print("not yet implemented")
-        return
+    def add_post(self, msg, post_room_id, post_id):
+        self.posts[post_id] = Post(post_room_id, msg, post_id)
 
     def post_comment(self, post_id):
         """
@@ -175,11 +158,17 @@ class Wall(SSNElement):
         """prints all the posts"""
         # call('clear')
         for post in self.posts.values():
-            post.print()
+            post.print(self.m_client.user_id)
         return
 
+    # def load_post_to_room_callback(self, post_room_id):
+    #     """Function called in Post/load_post_room when user wants to comment"""
+    #     room = PostRoom(self.m_client.join_room(post_room_id), self.init_msg_hist_for_room)
+    #     return room, self.m_client.user_id
+
+
 class Post(object):
-    def __init__(self, post_room, msg, post_id, client):
+    def __init__(self, post_room_id, msg, post_id):
         """
         :param room_id:
         :param msg:
@@ -187,14 +176,19 @@ class Post(object):
         :param client:
         """
         self.message = msg
-        self.post_room = post_room
+        # post rooms need to be set asynchronously
+        self.post_room = None
         self.post_id = post_id
-        self.room_id = self.post_room.get_room_id()
-        self.user_id = client.user_id
+        self.room_id = post_room_id
+        self.user_id = None
         self.comments = []
 
     def get_room_name(self):
         return self.post_room.get_room_name()
+
+    # load post room loads the post room asynchronously
+    async def load_post_room(self, load_post_callback):
+        self.post_room, self.user_id = await load_post_callback(self.room_id)
 
 
     # TODO: The reason for the client argument is so that we know which client to
