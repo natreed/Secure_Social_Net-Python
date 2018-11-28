@@ -19,7 +19,6 @@ from matrix_client.client import MatrixClient
 from matrix_client.errors import MatrixRequestError
 from requests.exceptions import MissingSchema
 from SSNClient import SSNClient
-from SSNRoom import SSNRoom
 import json
 from Wall import Wall
 from time import sleep
@@ -31,7 +30,11 @@ class ssn():
         self.m_client = MatrixClient(host)
         self.login(username, password)
         self.remove_empty_rooms(self.m_client)
-        self.landing_room = landing_room
+        self.chat_landing_room = landing_room
+        self.wall_landing_room = "#{}_w:matrix.org".format(username.split(':')[0][1:])
+        # make sure rooms have names
+        for room in self.m_client.rooms.values():
+            room.set_room_name(room.display_name.split(':')[0].lstrip('#'))
         # TODO: Syncing all of the rooms including posts upon logging in will destroy usability
         # No way to do partial sync with current API. Extend API?
         # Wall and chat client hold state for themselves respectively.
@@ -40,7 +43,6 @@ class ssn():
         """This is cool. Wall store stores the state, so if
         we want to see a friend's wall, we can have
         them send us their wall state and build it for ourselves."""
-
         if os.stat("./Stores/Wall_Store.txt").st_size != 0:
             with open('Stores/Wall_Store.txt', 'r+') as json_file:
                 # raw_data = json_file.read()
@@ -70,16 +72,16 @@ class ssn():
 
     def render_client(self):
         """changes context to chat"""
-        self.current_interface = self.chat_client.load(self.landing_room)
+        self.current_interface = self.chat_client.load(self.chat_landing_room)
         print("Welcome back to the client!")
 
     def start_ssn_client(self):
         """this function is just for the sake of being explicit"""
-        return SSNClient(self.m_client, self.landing_room)
+        return SSNClient(self.m_client, self.chat_landing_room)
 
     def start_wall(self):
         """for readability"""
-        wall = Wall(self.m_client)
+        wall = Wall(self.m_client, self.wall_landing_room)
         wall.load()
         return wall
 
@@ -150,9 +152,10 @@ class ssn():
         :return:
         """
         for room_id, room in MatrixClient.rooms.items():
-            if room.display_name == 'Empty room':
+            if len(room.aliases) == 0:
                 MatrixClient.api.leave_room(room.room_id)
         return MatrixClient
+
     def wall_input_handler(self, cmd, args):
         """
         Called for messages received while in wall context
@@ -199,7 +202,7 @@ class ssn():
                 self.current_interface.current_room.room.send_text(msg)
 
     def run(self):
-        self.current_interface.load(self.landing_room)
+        self.current_interface.load(self.chat_landing_room)
         self.current_interface.m_client.start_listener_thread()
         self.listen()
 

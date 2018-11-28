@@ -19,18 +19,25 @@ class SSNRoom(object):
         self.msg_store = []
         """"""
         for index, e in enumerate(self.room.get_events()):
-            if e['type'] == 'm.room.message' and e['content']['body'][0] != '{':
-                self.msg_store.append(e['content']['body'])
+            if e['type'] == 'm.room.message'\
+                    and len(e['content']['body']) > 0\
+                    and e['content']['body'][0] != '{':
+                self.msg_store.append("{0}: {1}".format(
+                    e['sender'], e['content']['body']))
             else:
                 # we don't need to know non-message events before logon
                 self.room.events.pop(index)
                 # print(popped)
         update_parent(self.room.name, self.msg_store)
 
-
-
     def set_room_name(self, name):
         return self.room.set_room_name(name)
+
+    def get_room_name(self):
+        return self.room.name
+
+    def get_room_id(self):
+        return self.room.room_id
 
     def leave_room(self):
         return self.room.leave()

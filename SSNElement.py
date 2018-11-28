@@ -4,11 +4,12 @@ from matrix_client.api import MatrixRequestError
 import time
 
 
-class SSN_element(object):
-    def __init__(self, client):
+class SSNElement:
+    def __init__(self, client, landing_room):
         self.m_client = client
         """Additional state for SSN"""
         self.current_room = None
+        self.landing_room = landing_room
         self.friends = {}
         # the room table matches the room name to the to the room id
         self.room_table = {}
@@ -20,9 +21,8 @@ class SSN_element(object):
         self.loaded_rooms = {}
         self.update_room_table()
         self.rendered = False
-        for room in self.m_client.rooms.values():
-            room.set_room_name(room.display_name.split(':')[0].lstrip('#'))
-            self.all_rooms_messages[room.display_name] = defaultdict()
+
+
 
     @classmethod
     def on_message(cls, room, event):
@@ -72,7 +72,7 @@ class SSN_element(object):
         for id, room in self.m_client.rooms.items():
             self.room_table[room.name] = id
 
-    def join_room(self, room_id_alias=None, prepend=None):
+    def join_room(self, room_id_alias=None, print_room=True):
         """
         :param room_id_alias:
         :return matrix room object:
@@ -83,9 +83,8 @@ class SSN_element(object):
             # this sets the user profile for the client that is specific to the room
             room.set_user_profile(displayname=self.m_client.user_id.split(':')[0][1:])
             room.set_room_name(room_id_alias.split(':')[0].lstrip('#'))
-            print("CURRENT ROOM: {}".format(room.name.upper()))
-            if prepend:
-                room.set_room_name(prepend + room.name)
+            if print_room:
+                print("CURRENT ROOM: {}".format(room.name.upper()))
             room.backfill_previous_messages()
             self.is_room_setup = True
             for msg in self.all_rooms_messages[room.name].values():

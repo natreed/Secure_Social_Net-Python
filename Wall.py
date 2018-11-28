@@ -1,12 +1,14 @@
 from collections import OrderedDict
 from matrix_client.errors import MatrixRequestError
-from SSN_element import SSN_element
+from SSNElement import SSNElement
 import json
-from SSNRoom import SSNRoom
+from PostRoom import PostRoom
+from WallRoom import WallRoom
+import time
 
-class Wall(SSN_element):
-    def __init__(self, client):
-        super().__init__(client)
+class Wall(SSNElement):
+    def __init__(self, client, landing_room):
+        super().__init__(client, landing_room)
         self.posts = OrderedDict()
         self.post_id = 1
         # friends who have access to my wall
@@ -16,37 +18,51 @@ class Wall(SSN_element):
 
     def initialize_from_file(self, friends, saved_posts):
         self.friends = friends
+
         for key, post in saved_posts.items():
-            self.add_post(post["msg"], post["room_id"], self.post_id)
+            room_id_alias = post["room_id"]
+            try:
+
+                rm = self.join_room(room_id_alias)
+                room = PostRoom(rm, self.init_msg_hist_for_room)
+                self.add_post(post["msg"], room, self.post_id)
+            except BaseException as e:
+                print(e)
+                print("comment history was lost for this post")
+                try:
+                    self.remove_post(post["post_id"])
+                except BaseException as e:
+                    print(e)
+                    print("creating new room for post")
+                    room = PostRoom(self.m_client.create_room(room_id_alias), self.init_msg_hist_for_room)
+                    self.add_post(post["msg"], room, self.post_id)
             self.post_id += 1
-        self.update_wall_store()
         self.initialized = True
         return
+
+
+
 
     def load(self):
         # iterate through rooms to find wall
         user_id = self.m_client.user_id
         user_name = user_id.split(':')[0][1:]
-        wall_room = "#{0}_w:matrix.org".format(user_name)
         wall_handle = user_name + "_w"
+        room_name = self.landing_room.split(':')[0][1:]
+        # TODO: COMMEMT OUT THIS LINE
+        # self.remove_all_posts()
 
-        if wall_handle in self.room_table:
-            if type(self.current_room) is not SSNRoom:
-                print(type(self.current_room))
-                self.current_room = SSNRoom(self.join_room(wall_room), self.init_msg_hist_for_room)
-                self.current_room.set_room_name(wall_handle)
-            return
+        if wall_handle in self.loaded_rooms.keys():
+            self.current_room = self.loaded_rooms[room_name]
+            for msg in self.all_rooms_messages[room_name].values():
+                print(msg)
+        elif room_name in self.room_table:
+            self.current_room = WallRoom(self.join_room(self.landing_room), self.init_msg_hist_for_room)
+            self.loaded_rooms[self.current_room.get_room_name()] = self.current_room
         else:
-            try:
-                room = self.m_client.create_room(wall_handle).room_id
-                self.current_room = SSNRoom(self.join_room(room.room_id), self.init_msg_hist_for_room)
-            except BaseException as e:
-                print(e)
-                # room exists but has been left
-                room = self.join_room(wall_room)
-                self.current_room = SSNRoom(room, self.init_msg_hist_for_room)
-
-            self.current_room.room.set_guest_access("can_join")
+            room = self.m_client.create_room(wall_handle)
+            self.current_room = WallRoom(room, self.init_msg_hist_for_room)
+        self.initialized = True
 
     def update_wall_store(self):
         """write current state to a file when finished. Can be brought back when
@@ -78,31 +94,16 @@ class Wall(SSN_element):
         elif event['type'] == "m.room.message":
             msg_body = event['content']['body']
             if msg_body == 'show_wall':
-                self.render(self.m_client)
+                self.render()
                 return
             # Wall handler passes a json formatted dictionary
             elif msg_body.startswith('{') and msg_body.endswith('}') and self.rendered:
                 """message is a json string"""
                 msg_dict = json.loads(msg_body)
                 if "add_post" in msg_dict.keys():
-                    msg = msg_dict['add_post']
-                    room = self.m_client.create_room()
-                    room.set_guest_access("can_join")
-                    room.name = "1_" + room.room_id
-                    self.add_post(msg, room.room_id, str(self.post_id))
-                    self.render(self.m_client)
-                    self.post_id += 1
-                    self.update_wall_store()
+                    self.post_msg(msg_dict)
                 elif "comment_post" in msg_dict.keys():
-                    # the value for comment post is the post id
-                    # self.post_comment(msg_dict['comment_post'])
-                    if not self.is_room_setup:
-                        self.current_event_id = event['event_id']
-                        self.current_room = SSNRoom(
-                            self.join_room(self.posts[int(msg_dict['comment_post'])].room_id, prepend="{}_"
-                                           .format(msg_dict['comment_post'])),
-                            self.init_msg_hist_for_room)
-                        print("Post comment here ...\n")
+                    self.comment_post(event, msg_dict)
                 elif "remove_post" in msg_dict.keys():
                     self.remove_post(msg_dict['remove_post'])
             else:
@@ -110,20 +111,47 @@ class Wall(SSN_element):
         self.rendered = True
         self.is_room_setup = False
 
+    def post_msg(self, msg_dict):
+        msg = msg_dict['add_post']
+        room = self.m_client.create_room()
+        room.set_guest_access("can_join")
+        room.name = "p_{}".format(room.room_id)
+        pst_room = PostRoom(room, self.init_msg_hist_for_room)
+        self.loaded_rooms[pst_room.get_room_name()] = pst_room
+        self.add_post(msg, pst_room, str(self.post_id))
+        self.render()
+        self.post_id += 1
+        self.update_wall_store()
+
+    def comment_post(self, event, msg_dict):
+        if not self.is_room_setup:
+            self.current_event_id = event['event_id']
+            room_id_alias = self.posts[int(msg_dict['comment_post'])].room_id
+            room = self.join_room(room_id_alias)
+            self.current_room = PostRoom(room, self.init_msg_hist_for_room)
+            print("Post comment here ...\n")
+
     def remove_post(self, post_id):
         post = self.posts.pop(post_id)
         try:
             self.m_client.api.leave_room(post.room_id)
         except MatrixRequestError as e:
             if e.code == 404: # not a known room
-                x = None
+                print("not a known room")
             else:
                 print(e)
         print("Post {} removed.".format(post_id))
         self.update_wall_store()
 
-    def add_post(self, msg, room_id, post_id):
-        self.posts[post_id] = Post(room_id, msg, post_id, self.m_client)
+    def remove_all_posts(self):
+        """for when shit hits the fan"""
+        for key, post in self.posts.items():
+            self.remove_post(post.post_id)
+        self.update_wall_store()
+
+
+    def add_post(self, msg, post_room, post_id):
+        self.posts[post_id] = Post(post_room, msg, post_id, self.m_client)
 
     def invite(self, user_id, handle):
         print("not yet implemented")
@@ -143,15 +171,15 @@ class Wall(SSN_element):
         """friends will be able to see the Wall"""
         self.friends[user_name] = ""
 
-    def render(self, client):
+    def render(self):
         """prints all the posts"""
         # call('clear')
         for post in self.posts.values():
-            post.print(client)
+            post.print()
         return
 
 class Post(object):
-    def __init__(self, room_id, msg, post_id, client):
+    def __init__(self, post_room, msg, post_id, client):
         """
         :param room_id:
         :param msg:
@@ -159,15 +187,17 @@ class Post(object):
         :param client:
         """
         self.message = msg
-        self.room_id = room_id
+        self.post_room = post_room
         self.post_id = post_id
+        self.room_id = self.post_room.get_room_id()
         self.user_id = client.user_id
         self.comments = []
 
-    def get_room(self):
-        return self.room_id
+    def get_room_name(self):
+        return self.post_room.get_room_name()
+
 
     # TODO: The reason for the client argument is so that we know which client to
     # send the post to. First I want to get the bugs worked out.
-    def print(self, client):
-        print("id={0}: {1}: {2}".format(self.post_id, self.user_id, self.message))
+    def print(self, user_id):
+        print("id={0}: {1}: {2}".format(self.post_id, user_id, self.message))
