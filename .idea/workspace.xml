@@ -2,11 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="df2a480a-b099-4c77-93a5-fe3e93dec6b9" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/ChatRoom.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FriendWall.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PostRoom.py" beforeDir="false" afterPath="$PROJECT_DIR$/PostRoom.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SSNClient.py" beforeDir="false" afterPath="$PROJECT_DIR$/SSNClient.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SSNElement.py" beforeDir="false" afterPath="$PROJECT_DIR$/SSNElement.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SSNRoom.py" beforeDir="false" afterPath="$PROJECT_DIR$/SSNRoom.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Stores/Wall_Store.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Stores/Wall_Store.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Wall.py" beforeDir="false" afterPath="$PROJECT_DIR$/Wall.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WallRoom.py" beforeDir="false" afterPath="$PROJECT_DIR$/WallRoom.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ssn.py" beforeDir="false" afterPath="$PROJECT_DIR$/ssn.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,22 +21,23 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/matrix_python$simple_chat_client.coverage" NAME="simple_chat_client Coverage Results" MODIFIED="1543431343400" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/matrix_python$simple_chat_client.coverage" NAME="simple_chat_client Coverage Results" MODIFIED="1543474616716" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/matrix_python$tests.coverage" NAME="tests Coverage Results" MODIFIED="1541625334368" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/matrix_python$Wall.coverage" NAME="Wall Coverage Results" MODIFIED="1543442865601" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/matrix_python$last_working_version.coverage" NAME="last_working_version Coverage Results" MODIFIED="1541621533911" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FavoritesManager">
     <favorites_list name="matrix_python" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.4516686">
+    <splitter split-orientation="horizontal" split-proportion="0.45072192">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="Wall.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Wall.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1830">
-                  <caret line="122" column="40" lean-forward="true" selection-start-line="122" selection-start-column="40" selection-end-line="122" selection-end-column="40" />
+                <state relative-caret-position="132">
+                  <caret line="118" selection-start-line="118" selection-end-line="118" />
                   <folding>
                     <element signature="e#0#35#0" expanded="true" />
                   </folding>
@@ -58,7 +63,30 @@
             <entry file="file://$PROJECT_DIR$/Stores/Wall_Store.txt">
               <provider selected="true" editor-type-id="text-editor">
                 <state>
-                  <caret column="172" selection-start-column="172" selection-end-column="172" />
+                  <caret column="364" selection-start-column="364" selection-end-column="364" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="WallRoom.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/WallRoom.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="255">
+                  <caret line="17" column="33" lean-forward="true" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
+                  <folding>
+                    <element signature="e#7#34#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="FriendWall.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/FriendWall.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state>
+                  <folding>
+                    <element signature="e#1#34#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -70,8 +98,8 @@
           <file leaf-file-name="SSNRoom.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/SSNRoom.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="191">
-                  <caret line="21" column="33" selection-start-line="21" selection-start-column="33" selection-end-line="21" selection-end-column="33" />
+                <state relative-caret-position="180">
+                  <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
                   <folding>
                     <element signature="e#0#51#0" expanded="true" />
                   </folding>
@@ -79,11 +107,29 @@
               </provider>
             </entry>
           </file>
+          <file leaf-file-name="ChatRoom.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/ChatRoom.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="300">
+                  <caret line="20" selection-start-line="20" selection-end-line="20" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="PostRoom.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/PostRoom.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="150">
+                  <caret line="10" column="35" lean-forward="true" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+                </state>
+              </provider>
+            </entry>
+          </file>
           <file leaf-file-name="SSNClient.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/SSNClient.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="199">
-                  <caret line="17" column="46" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="46" />
+                <state relative-caret-position="157">
+                  <caret line="21" column="29" selection-start-line="21" selection-start-column="29" selection-end-line="21" selection-end-column="29" />
                   <folding>
                     <element signature="e#0#35#0" expanded="true" />
                   </folding>
@@ -91,20 +137,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="WallRoom.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/WallRoom.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="105">
-                  <caret line="7" selection-start-line="7" selection-end-line="7" />
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="ssn.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/ssn.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="465">
-                  <caret line="31" column="53" selection-start-line="31" selection-start-column="53" selection-end-line="31" selection-end-column="53" />
+                <state relative-caret-position="261">
+                  <caret line="144" column="37" selection-start-line="144" selection-start-column="37" selection-end-line="144" selection-end-column="37" />
                   <folding>
                     <element signature="e#373#383#0" expanded="true" />
                   </folding>
@@ -115,8 +152,8 @@
           <file leaf-file-name="SSNElement.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/SSNElement.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="395">
-                  <caret line="48" column="107" selection-start-line="48" selection-start-column="107" selection-end-line="48" selection-end-column="107" />
+                <state relative-caret-position="243">
+                  <caret line="58" column="26" selection-start-line="58" selection-start-column="26" selection-end-line="58" selection-end-column="26" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -138,16 +175,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>room.room</find>
-      <find>room_table</find>
-      <find>add_listener</find>
-      <find>SSNRoom</find>
-      <find>load()</find>
-      <find>split</find>
-      <find>set_room</find>
-      <find>load</find>
-      <find>room_id</find>
-      <find>add_post</find>
       <find>render</find>
       <find>self.current_room</find>
       <find>Wall(</find>
@@ -166,8 +193,18 @@
       <find>.name</find>
       <find>.name =</find>
       <find>other_rooms_messages</find>
-      <find>all_rooms_messages</find>
       <find>other</find>
+      <find>all_rooms_messages</find>
+      <find>self.loaded_rooms</find>
+      <find>json</find>
+      <find>room_table</find>
+      <find>elf.init_msg_hist_for_room</find>
+      <find>SSNRoom</find>
+      <find>wall_room_name</find>
+      <find>current_event_id</find>
+      <find>self.room_table[room.name][&quot;room_id&quot;]</find>
+      <find>current_room</find>
+      <find>client_input_handler</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -198,13 +235,15 @@
         <option value="$PROJECT_DIR$/globalState.py" />
         <option value="/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/matrix_client/room.py" />
         <option value="$PROJECT_DIR$/SSN_element.py" />
-        <option value="$PROJECT_DIR$/PostRoom.py" />
-        <option value="$PROJECT_DIR$/WallRoom.py" />
         <option value="$PROJECT_DIR$/Stores/Wall_Store.txt" />
-        <option value="$PROJECT_DIR$/ssn.py" />
+        <option value="$PROJECT_DIR$/PostRoom.py" />
         <option value="$PROJECT_DIR$/SSNRoom.py" />
-        <option value="$PROJECT_DIR$/SSNClient.py" />
+        <option value="$PROJECT_DIR$/ChatRoom.py" />
         <option value="$PROJECT_DIR$/Wall.py" />
+        <option value="$PROJECT_DIR$/FriendWall.py" />
+        <option value="$PROJECT_DIR$/WallRoom.py" />
+        <option value="$PROJECT_DIR$/ssn.py" />
+        <option value="$PROJECT_DIR$/SSNClient.py" />
         <option value="$PROJECT_DIR$/SSNElement.py" />
       </list>
     </option>
@@ -285,7 +324,26 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.simple_chat_client">
+  <component name="RunManager" selected="Python.Wall">
+    <configuration name="Wall" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="matrix_python" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Wall.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <configuration name="last_working_version" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="matrix_python" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -347,10 +405,12 @@
       <item itemvalue="Python.tests" />
       <item itemvalue="Python.simple_chat_client" />
       <item itemvalue="Python.last_working_version" />
+      <item itemvalue="Python.Wall" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.simple_chat_client" />
+        <item itemvalue="Python.Wall" />
         <item itemvalue="Python.last_working_version" />
       </list>
     </recent_temporary>
@@ -379,7 +439,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32935324" />
       <window_info anchor="right" id="Cargo" order="3" />
@@ -389,14 +448,14 @@
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32916668" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.2159204" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4990403" visible="true" weight="0.074054345" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4990403" visible="true" weight="0.15130527" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3283582" />
       <window_info anchor="right" id="Google Cloud Storage" order="4" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info id="Structure" order="1" sideWeight="0.5009597" side_tool="true" weight="0.14696486" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.3562189" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.519403" />
       <window_info id="Favorites" order="2" sideWeight="0.5009597" side_tool="true" weight="0.14696486" />
       <window_info anchor="bottom" id="Thumbnails" order="8" weight="0.32935324" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -455,7 +514,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="1031" />
+      <option name="time" value="1104" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -464,26 +523,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ssn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="63" column="53" selection-start-line="63" selection-start-column="53" selection-end-line="63" selection-end-column="53" />
-          <folding>
-            <element signature="e#373#383#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SSNElement.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="43" column="58" selection-start-line="43" selection-start-column="58" selection-end-line="43" selection-end-column="58" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_bundle/pydev_console_utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2265">
@@ -690,27 +729,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PostRoom.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.7/site-packages/matrix_client/api.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="166" column="19" selection-start-line="166" selection-start-column="8" selection-end-line="166" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Stores/room_store.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Stores/Wall_Store.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="172" selection-start-column="172" selection-end-column="172" />
         </state>
       </provider>
     </entry>
@@ -721,47 +743,83 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ssn.py">
+    <entry file="file://$PROJECT_DIR$/Stores/Wall_Store.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" column="53" selection-start-line="31" selection-start-column="53" selection-end-line="31" selection-end-column="53" />
+        <state>
+          <caret column="364" selection-start-column="364" selection-end-column="364" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PostRoom.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="35" lean-forward="true" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Stores/room_store.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/FriendWall.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
           <folding>
-            <element signature="e#373#383#0" expanded="true" />
+            <element signature="e#1#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WallRoom.py">
+    <entry file="file://$PROJECT_DIR$/ChatRoom.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SSNClient.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="17" column="46" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="46" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="300">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/SSNRoom.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="21" column="33" selection-start-line="21" selection-start-column="33" selection-end-line="21" selection-end-column="33" />
+        <state relative-caret-position="180">
+          <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
           <folding>
             <element signature="e#0#51#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ssn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="144" column="37" selection-start-line="144" selection-start-column="37" selection-end-line="144" selection-end-column="37" />
+          <folding>
+            <element signature="e#373#383#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SSNClient.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="21" column="29" selection-start-line="21" selection-start-column="29" selection-end-line="21" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WallRoom.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="33" lean-forward="true" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
+          <folding>
+            <element signature="e#7#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Wall.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1830">
-          <caret line="122" column="40" lean-forward="true" selection-start-line="122" selection-start-column="40" selection-end-line="122" selection-end-column="40" />
+        <state relative-caret-position="132">
+          <caret line="118" selection-start-line="118" selection-end-line="118" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
           </folding>
@@ -770,8 +828,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/SSNElement.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="48" column="107" selection-start-line="48" selection-start-column="107" selection-end-line="48" selection-end-column="107" />
+        <state relative-caret-position="243">
+          <caret line="58" column="26" selection-start-line="58" selection-start-column="26" selection-end-line="58" selection-end-column="26" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

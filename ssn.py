@@ -21,6 +21,7 @@ from requests.exceptions import MissingSchema
 from SSNClient import SSNClient
 import json
 from Wall import Wall
+from WallRoom import WallRoom
 from time import sleep
 
 
@@ -32,14 +33,12 @@ class ssn():
         # for cleanup of orphaned and abandoned rooms
         # self.remove_empty_rooms(self.m_client)
         self.chat_landing_room = landing_room
-        self.wall_landing_room = "#{}_w:matrix.org".format(username.split(':')[0][1:])
+        self.user_id = username.split(':')[0][1:]
+        self.wall_landing_room = "#{}_w:matrix.org".format(self.user_id)
         # make sure rooms have names
         for room in self.m_client.rooms.values():
-            room.set_room_name(room.display_name.split(':')[0].lstrip('#'))
-        # TODO: Syncing all of the rooms including posts upon logging in will destroy usability
-        # No way to do partial sync with current API. Extend API?
-        # Wall and chat client hold state for themselves respectively.
-        # They share a common base class, 'ssn_element'
+            room_name = room.display_name.split(':')[0].lstrip('#')
+            room.set_room_name(room_name)
         self.wall = self.start_wall()
         """This is cool. Wall store stores the state, so if
         we want to see a friend's wall, we can have
@@ -111,16 +110,16 @@ class ssn():
         args = msg.split()
         cmd = args.pop(0).lstrip('/')
         if cmd == "q":
-            if self.current_interface == self.wall:
-                self.render_client()
-                return
-            else:
-                self.wall.update_wall_store()  # stores wall state
-                print("Goodbye")
-                sys.exit(0)
+            self.wall.update_wall_store()  # stores wall state
+            self.wall.update_wall_state()
+            print("Goodbye")
+            # sys.exit(0)
         elif cmd in ('sw', 'show_wall'):
             if self.current_interface != self.wall:
                 self.render_wall()
+        elif cmd in ('sw', 'show_chat'):
+            if self.current_interface != self.chat_client:
+                self.render_client()
         if self.current_interface == self.wall:
             self.wall_input_handler(cmd, args)
         else:
@@ -135,10 +134,11 @@ class ssn():
         """
         if cmd in ('join_room', 'j'):
             msg = ' '.join(args)
-            try:
-                self.current_interface.load("#{0}:matrix.org".format(msg))
-            except BaseException as e:
-                print("{}: in ssn.py/client_input_handler".format(e))
+            self.current_interface.load("#{0}:matrix.org".format(msg))
+            # try:
+            #
+            # except BaseException as e:
+            #     print("{}: in ssn.py/client_input_handler".format(e))
 
         elif cmd in ('show_rooms', 's'):
             self.current_interface.show_rooms()
@@ -198,14 +198,18 @@ class ssn():
 
         while True:
             # Spin wait if there is no room ready for input
-            if self.current_interface.current_room:
+            room = self.current_interface.current_room
+            if room:
                 msg = input()
                 sleep(.1)
                 # print(msg)
                 if msg.startswith('/'):
                     self.input_controller(msg)
                 else:
-                    self.current_interface.current_room.room.send_text(msg)
+                    if type(room) == WallRoom and room.get_room_name() == self.user_id + "_w":
+                        continue
+                    else:
+                        self.current_interface.current_room.room.send_text(msg)
 
     def run(self):
         self.current_interface.load(self.chat_landing_room)

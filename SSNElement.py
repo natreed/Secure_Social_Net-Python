@@ -23,6 +23,7 @@ class SSNElement:
         # lookup table of room names to room_id's
         self.update_room_table()
         self.rendered = False
+        self.type = None
 
     @classmethod
     def on_message(cls, room, event):
@@ -35,7 +36,8 @@ class SSNElement:
     def init_msg_hist_for_room(self, room_name, msg_store):
         self.all_rooms_messages[room_name] = []
         for msg in msg_store:
-            """making timestamp key should avoid duplicates"""
+            """TODO: making timestamp key should avoid duplicates"""
+            """Don't want to print message if it is just updating wall state."""
             self.all_rooms_messages[room_name].append(msg)
             print(msg)
 
@@ -52,8 +54,10 @@ class SSNElement:
             msg = "{0}: {1}".format(event['sender'], event['content']['body'])
             if prepend:
                 msg = prepend + msg
+
             if self.is_room_setup and room.name == self.current_room.room.name:
                 print(msg)
+
             self.all_rooms_messages[room.name].append("\t" + msg)
 
     def show_rooms(self):
