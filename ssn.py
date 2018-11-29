@@ -18,12 +18,13 @@ import os
 from matrix_client.client import MatrixClient
 from matrix_client.errors import MatrixRequestError
 from requests.exceptions import MissingSchema
-from SSNClient import SSNClient
+from SSNChat import SSNChat
 import json
-from Wall import Wall
+from SSNWall import SSNWall
 from WallRoom import WallRoom
 from time import sleep
-
+import subprocess
+import shlex
 
 class ssn():
     """ssn is the controller for different app elements"""
@@ -40,6 +41,8 @@ class ssn():
             room_name = room.display_name.split(':')[0].lstrip('#')
             room.set_room_name(room_name)
         self.wall = self.start_wall()
+        # SSN element for rendering friend's wall
+        self.friend_wall = None
         """This is cool. Wall store stores the state, so if
         we want to see a friend's wall, we can have
         them send us their wall state and build it for ourselves."""
@@ -60,8 +63,6 @@ class ssn():
         the previous context will be loaded."""
         self.current_interface = self.chat_client
 
-
-
     def render_wall(self):
         """changes context to wall"""
         self.current_interface = self.wall
@@ -77,11 +78,11 @@ class ssn():
 
     def start_ssn_client(self):
         """this function is just for the sake of being explicit"""
-        return SSNClient(self.m_client, self.chat_landing_room)
+        return SSNChat(self.m_client, self.chat_landing_room)
 
     def start_wall(self):
         """for readability"""
-        wall = Wall(self.m_client, self.wall_landing_room)
+        wall = SSNWall(self.m_client, self.wall_landing_room)
         wall.load()
         return wall
 
@@ -135,10 +136,6 @@ class ssn():
         if cmd in ('join_room', 'j'):
             msg = ' '.join(args)
             self.current_interface.load("#{0}:matrix.org".format(msg))
-            # try:
-            #
-            # except BaseException as e:
-            #     print("{}: in ssn.py/client_input_handler".format(e))
 
         elif cmd in ('show_rooms', 's'):
             self.current_interface.show_rooms()
@@ -212,6 +209,7 @@ class ssn():
                         self.current_interface.current_room.room.send_text(msg)
 
     def run(self):
+
         self.current_interface.load(self.chat_landing_room)
         self.current_interface.m_client.start_listener_thread()
         self.listen()

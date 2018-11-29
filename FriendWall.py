@@ -5,6 +5,8 @@ from WallRoom import WallRoom
 import time
 
 class FriendWall(SSNElement):
+    """Friend wall extends SSNElement, NOT Wall. This allows for
+    isolation from wall functions that a friend should not have access to."""
     def __init__(self, wall_store, room):
         super().__init__(self.m_client, room)
         self.wall_store = json.loads(wall_store)

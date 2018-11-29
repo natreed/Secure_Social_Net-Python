@@ -3,7 +3,7 @@ from SSNElement import SSNElement
 from ChatRoom import ChatRoom
 
 
-class SSNClient(SSNElement):
+class SSNChat(SSNElement):
     """a wrapper class for client to add social network state variables"""
     def __init__(self, client, landing_room):
         super().__init__(client, landing_room)

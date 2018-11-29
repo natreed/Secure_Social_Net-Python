@@ -4,12 +4,9 @@ from SSNElement import SSNElement
 import json
 from PostRoom import PostRoom
 from WallRoom import WallRoom
-import atexit
-
-import asyncio
 import time
 
-class Wall(SSNElement):
+class SSNWall(SSNElement):
     def __init__(self, client, landing_room):
         super().__init__(client, landing_room)
         self.owner = True
