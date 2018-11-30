@@ -51,7 +51,7 @@ class SSNWall(SSNElement):
             room.set_room_name(self.wall_handle)
             self.room_table[self.wall_handle] = {"room_id": room.room_id, "loaded": False}
             self.current_room = WallRoom(room)
-            self.loaded_rooms[room.room.room_id] = self.current_room
+            self.loaded_rooms[room.room_id] = self.current_room
         self.initialized = True
 
     def update_wall_store(self):

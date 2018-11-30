@@ -73,12 +73,14 @@ class ssn():
 
     def render_client(self):
         """changes context to chat"""
-        self.current_interface = self.chat_client.load(self.chat_landing_room)
+        self.current_interface = self.chat_client.load()
         print("Welcome back to the client!")
 
     def start_ssn_client(self):
         """this function is just for the sake of being explicit"""
-        return SSNChat(self.m_client, self.chat_landing_room)
+        chat_client = SSNChat(self.m_client, self.chat_landing_room)
+        chat_client.load(self.chat_landing_room)
+        return chat_client
 
     def start_wall(self):
         """for readability"""
@@ -134,8 +136,8 @@ class ssn():
         :return:
         """
         if cmd in ('join_room', 'j'):
-            msg = ' '.join(args)
-            self.current_interface.load("#{0}:matrix.org".format(msg))
+            msg = '#{}:matrix.org'.format(' '.join(args))
+            self.current_interface.load(msg)
 
         elif cmd in ('show_rooms', 's'):
             self.current_interface.show_rooms()
@@ -216,4 +218,4 @@ class ssn():
 
 
 if __name__ == '__main__':
-    ssn('http://www.matrix.org', '@natreed:matrix.org', 'vatloc4evr', '#my_room:matrix.org').run()
+    ssn('http://www.matrix.org', '@natreed:matrix.org', 'vatloc4evr', '#natreed-cht:matrix.org').run()
