@@ -18,7 +18,6 @@ class SSNWall(SSNElement):
         # friends who have access to my wall
         self.friends = {"jimmy": "jim's key", "marco": "marcos key"}
         self.initialized = False
-        self.user_id = self.m_client.user_id
         self.user_name = self.parse_room_name_or_id(self.user_id)
         self.wall_store_file = "Stores/{}_Wall_Store.txt".format(self.user_name)
         self.wall_room_name = self.parse_room_name_or_id(self.landing_room)
@@ -28,7 +27,6 @@ class SSNWall(SSNElement):
         return NotImplementedError
 
     def load(self):
-
         if self.wall_room_name in self.room_table:
             room_id = self.get_room_id(self.wall_room_name)
             if room_id in self.loaded_rooms.keys():
@@ -47,6 +45,7 @@ class SSNWall(SSNElement):
             print("you do not have permission to view this wall. ask your buddy for an invite.")
             return
 
+        self.render()
         self.initialized = True
 
     def load_wall_state(self):
@@ -56,9 +55,11 @@ class SSNWall(SSNElement):
             if self.wall_state["posts"]:
                 for post_id, post in self.wall_state["posts"].items():
                     self.add_post(post["msg"], post["room_id"], int(post_id), post["room_name"])
+                    self.post_id += 1
         except TypeError:
-            print("Room topic empty. Loading state from file")
-            self.initialize_from_file()
+            if self.owner:
+                print("Room topic empty. Loading state from file")
+                self.initialize_from_file()
 
     def initialize_from_file(self):
         if os.stat("./{}".format(self.wall_store_file)).st_size != 0:
@@ -89,14 +90,6 @@ class SSNWall(SSNElement):
         self.current_room.room.set_room_topic(state_string)
         # print("print statement for testing")
 
-    def update_wall_store(self):
-        """write current state to a file when finished. Can be brought back when
-        Client starts again."""
-        state_string = self.wall_state_to_json()
-        with open('./{}'.format(self.wall_store_file), 'w') as outfile:
-            outfile.write(state_string)
-        return
-
     def wall_state_to_json(self):
         posts_info = {}
         for key, post in self.posts.items():
@@ -123,9 +116,10 @@ class SSNWall(SSNElement):
             self.loaded_rooms[post.room_id] = self.current_room
             self.room_table[room_name] = post_room.room_id
 
-        print("POST MESSAGE: {}".format(post.message))
-        for msg in self.all_rooms_messages[room_name]:
-            print(msg)
+        if msg_dict['sender'] == self.user_id:
+            print("POST MESSAGE: {}".format(post.message))
+            for msg in self.all_rooms_messages[room_name]:
+                print(msg)
 
         print("Post comment here ...\n")
 
@@ -136,7 +130,6 @@ class SSNWall(SSNElement):
     def render(self):
         """prints all the posts"""
         # call('clear')
-
         for post in self.posts.values():
             post.print(self.m_client.user_id)
         return

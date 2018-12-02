@@ -24,6 +24,7 @@ class FriendWall(SSNWall):
             elif msg_body.startswith('{') and msg_body.endswith('}') and self.rendered:
                 """message is a json string"""
                 msg_dict = json.loads(msg_body)
+                msg_dict['sender'] = event['sender']
                 if "comment_post" in msg_dict.keys():
                     self.post_comment(msg_dict)
                 else:

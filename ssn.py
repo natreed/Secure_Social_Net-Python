@@ -118,13 +118,15 @@ class ssn():
         elif cmd in ('sw', 'show_wall'):
             # if there is no wall name in the args, show clients wall
             # if there is,  show friends wall
-            if len(args) == 0:
-                if type(self.current_interface) != SSNWall:
-                    self.render_wall()
-            else:
+
+            if isinstance(self.current_interface, FriendWall):
                 friend_room = "#{}:matrix.org".format(' '.join(args))
-                self.current_interface = FriendWall(friend_room)
+                self.render_friend_wall(friend_room)
                 return
+            else:
+                self.render_wall()
+                return
+
         elif cmd in ('fw', 'friend_wall'):
             # TODO: ran out of time, but I would like to have a table of friends, walls, keys, stored locally for
             # easy lookup
@@ -133,6 +135,7 @@ class ssn():
             else:
                 room_id_alias = "#{}:matrix.org".format(' '.join(args))
                 self.render_friend_wall(room_id_alias)
+                return
 
         elif cmd in ('sc', 'show_chat'):
             if not isinstance(self.current_interface, SSNChat):
@@ -180,7 +183,7 @@ class ssn():
         :param args:
         :return:
         """
-        if cmd == "show_wall" or cmd == "sw":
+        if cmd == "show_wall" or cmd == "sw" or cmd == 'fw':
             """send a message of type text for now"""
             self.current_interface.current_room.room.send_notice('show_wall')
 

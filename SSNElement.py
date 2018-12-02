@@ -11,6 +11,7 @@ class SSNElement:
         self.current_room = None
         self.landing_room = landing_room
         self.friends = {}
+        self.user_id = self.m_client.user_id
         # the room table matches the room name to the to the room id
         self.room_table = {}
         self.is_room_setup = False
@@ -54,10 +55,14 @@ class SSNElement:
             if prepend:
                 msg = prepend + msg
 
-            if self.is_room_setup and room.name == self.current_room.room.name:
+            if self.is_room_setup \
+                    and room.name == self.current_room.room.name\
+                    and self.user_id == event['sender']:
                 print(msg)
 
-            self.all_rooms_messages[room.name].append(msg)
+            if room.name == 'Empty Room':
+                room_name = self.parse_room_name_or_id(room.room_id)
+            self.all_rooms_messages[room_name].append(msg)
 
     def show_rooms(self):
         for room in self.m_client.rooms.values():

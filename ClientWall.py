@@ -29,6 +29,7 @@ class ClientWall(SSNWall):
             elif msg_body.startswith('{') and msg_body.endswith('}') and self.rendered:
                 """message is a json string"""
                 msg_dict = json.loads(msg_body)
+                msg_dict['sender'] = event['sender']
                 if "add_post" in msg_dict.keys():
                     self.post_msg(msg_dict)
                 elif "comment_post" in msg_dict.keys():
@@ -54,6 +55,14 @@ class ClientWall(SSNWall):
         self.render()
         self.post_id += 1
         self.update_wall_store()
+
+    def update_wall_store(self):
+        """write current state to a file when finished. Can be brought back when
+        Client starts again."""
+        state_string = self.wall_state_to_json()
+        with open('./{}'.format(self.wall_store_file), 'w') as outfile:
+            outfile.write(state_string)
+        return
 
     def remove_post(self, post_id):
         post = self.posts[post_id]
