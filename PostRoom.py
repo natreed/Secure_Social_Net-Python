@@ -5,11 +5,11 @@ from SSNRoom import SSNRoom
 class PostRoom(SSNRoom):
     def __init__(self, room, update_parent):
         super().__init__(room)
-
         self._load(update_parent)
 
     def _load(self, update_parent):
-        for index, e in enumerate(self.room.get_events()):
+        events = self.room.get_events()
+        for index, e in enumerate(events):
             if e['type'] == 'm.room.message' \
                     and len(e['content']['body']) > 0 \
                     and e['content']['body'][0] != '{':
@@ -19,4 +19,5 @@ class PostRoom(SSNRoom):
                 # we don't need to know non-message events before logon
                 self.room.events.pop(index)
                 # print(popped)
-        update_parent(self.room.name, self.msg_store)
+        room_name = self.parse_room_name_or_id(self.room.room_id)
+        update_parent(room_name, self.msg_store)

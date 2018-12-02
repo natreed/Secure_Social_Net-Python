@@ -19,23 +19,25 @@ from matrix_client.client import MatrixClient
 from matrix_client.errors import MatrixRequestError
 from requests.exceptions import MissingSchema
 from SSNChat import SSNChat
-import json
 from SSNWall import SSNWall
+import json
+from ClientWall import ClientWall
 from WallRoom import WallRoom
 from time import sleep
+from FriendWall import FriendWall
 import subprocess
 import shlex
 
 class ssn():
     """ssn is the controller for different app elements"""
-    def __init__(self, host, username, password, landing_room):
-        self.m_client = MatrixClient(host)
-        self.login(username, password)
+    def __init__(self, args):
+        self.m_client = MatrixClient(args["homeserver"])
+        self.login(args["m_username"], args["pw"])
         # for cleanup of orphaned and abandoned rooms
         # self.remove_empty_rooms(self.m_client)
-        self.chat_landing_room = landing_room
-        self.user_id = username.split(':')[0][1:]
-        self.wall_landing_room = "#{}_w:matrix.org".format(self.user_id)
+        self.chat_landing_room = args["chat_landing_room"]
+        self.user_id = args["m_username"].split(':')[0][1:]
+        self.wall_landing_room = args["wall_landing_room"]
         # make sure rooms have names
         for room in self.m_client.rooms.values():
             room_name = room.display_name.split(':')[0].lstrip('#')
@@ -43,16 +45,6 @@ class ssn():
         self.wall = self.start_wall()
         # SSN element for rendering friend's wall
         self.friend_wall = None
-        """This is cool. Wall store stores the state, so if
-        we want to see a friend's wall, we can have
-        them send us their wall state and build it for ourselves."""
-        if os.stat("./Stores/Wall_Store.txt").st_size != 0:
-            with open('Stores/Wall_Store.txt', 'r+') as json_file:
-                # raw_data = json_file.read()
-                # wall_store = pickle.loads(raw_data) # deserialization
-                wall_store = json.load(json_file)
-                self.wall.initialize_from_file(wall_store["friends"],
-                                               wall_store["posts"])
 
         self.chat_client = self.start_ssn_client()
         """Current interface is the context/interface of the current 'ssn_element'.
@@ -66,15 +58,21 @@ class ssn():
     def render_wall(self):
         """changes context to wall"""
         self.current_interface = self.wall
-        # call('clear')
         username = self.m_client.user_id.split(':')[0][1:]
         print("Welcome to {0}'s wall!".format(username))
         self.wall.load()
 
+    def render_friend_wall(self, wall_room):
+        self.current_interface = FriendWall(self.m_client, wall_room)
+        self.current_interface.load()
+        print("welcome to {}'s wall".format(wall_room.split(':')[0][1:]))
+
     def render_client(self):
         """changes context to chat"""
-        self.current_interface = self.chat_client.load()
-        print("Welcome back to the client!")
+        self.current_interface = self.chat_client
+        username = self.m_client.user_id.split(':')[0][1:]
+        print("Welcome to {0}'s chat client!".format(username))
+        self.chat_client.load(self.chat_landing_room)
 
     def start_ssn_client(self):
         """this function is just for the sake of being explicit"""
@@ -84,7 +82,7 @@ class ssn():
 
     def start_wall(self):
         """for readability"""
-        wall = SSNWall(self.m_client, self.wall_landing_room)
+        wall = ClientWall(self.m_client, self.wall_landing_room)
         wall.load()
         return wall
 
@@ -118,14 +116,31 @@ class ssn():
             print("Goodbye")
             # sys.exit(0)
         elif cmd in ('sw', 'show_wall'):
-            if self.current_interface != self.wall:
-                self.render_wall()
-        elif cmd in ('sw', 'show_chat'):
-            if self.current_interface != self.chat_client:
+            # if there is no wall name in the args, show clients wall
+            # if there is,  show friends wall
+            if len(args) == 0:
+                if type(self.current_interface) != SSNWall:
+                    self.render_wall()
+            else:
+                friend_room = "#{}:matrix.org".format(' '.join(args))
+                self.current_interface = FriendWall(friend_room)
+                return
+        elif cmd in ('fw', 'friend_wall'):
+            # TODO: ran out of time, but I would like to have a table of friends, walls, keys, stored locally for
+            # easy lookup
+            if len(args) == 0:
+                print('please specify friends wall room')
+            else:
+                room_id_alias = "#{}:matrix.org".format(' '.join(args))
+                self.render_friend_wall(room_id_alias)
+
+        elif cmd in ('sc', 'show_chat'):
+            if not isinstance(self.current_interface, SSNChat):
                 self.render_client()
-        if self.current_interface == self.wall:
+            return
+        if isinstance(self.current_interface, SSNWall):
             self.wall_input_handler(cmd, args)
-        else:
+        elif isinstance(self.current_interface, SSNChat):
             self.client_input_handler(cmd, args)
 
     def client_input_handler(self, cmd, args):
@@ -190,6 +205,12 @@ class ssn():
             if id.isdigit:
                 data = {"remove_post": id}
                 self.current_interface.current_room.room.send_notice(json.dumps(data))
+            elif id == 'a':
+                data = {"remove_post": 'a'}
+                self.current_interface.current_room.room.send_notice(json.dumps(data))
+            else:
+                print("invalid command {}".format(id))
+
         else:
             print(format("Did not recognize the command: {0}").format(cmd))
 
@@ -205,7 +226,7 @@ class ssn():
                 if msg.startswith('/'):
                     self.input_controller(msg)
                 else:
-                    if type(room) == WallRoom and room.get_room_name() == self.user_id + "_w":
+                    if room.get_room_name() == self.wall_landing_room.split(':')[0][1:]:
                         continue
                     else:
                         self.current_interface.current_room.room.send_text(msg)
@@ -218,4 +239,14 @@ class ssn():
 
 
 if __name__ == '__main__':
-    ssn('http://www.matrix.org', '@natreed:matrix.org', 'vatloc4evr', '#natreed-cht:matrix.org').run()
+    natreed_args = {"homeserver": 'http://www.matrix.org',
+                    "m_username": '@natreed:matrix.org',
+                    "pw": 'vatloc4evr',
+                    "chat_landing_room": '#my_room:matrix.org',
+                    "wall_landing_room": '#natreed_w:matrix.org'}
+    nat_reed_args = {"homeserver": 'http://www.matrix.org',
+                     "m_username": '@nat-reed:matrix.org',
+                     "pw": 'vatloc4evr',
+                     "chat_landing_room": '#nat-reed-chat:matrix.org',
+                     "wall_landing_room": '#nat-reed_wall:matrix.org'}
+    ssn(natreed_args).run()

@@ -1,0 +1,1 @@
+{"friends": {"jimmy": "jim's key", "marco": "marcos key"}, "posts": {"1": {"room_id": "!wePMKxRxNamNpBuwfc:matrix.org", "msg": "one", "post_id": 1, "room_name": null}, "2": {"room_id": "!ucisdzpjdacIdqKWAV:matrix.org", "msg": "two", "post_id": 2, "room_name": null}}}
