@@ -1,7 +1,6 @@
 # Secure Social Net (Python CLI)
 
 ### Copyright (c) 2018 Nathan Reed 
-###     in collaboration with Professor Charles V. Wright (Porltand State University)
 
 ## Background: 
 Secure Social Net is an application built on the Matrix API. The goal is to build new social networking features using the API in it's current form. The command line client is a way to focus on the features themselves and how they are structured. The next step will be to integrate these features into a web app.
@@ -24,7 +23,7 @@ If you want to watch a live demonstration (WARNING: It's not very exciting.)
 - source venv/bin/activate
 - pip install -r requirements.txt
 - Open Main.py and replace user_id and password with your new user. Make up some appropriate names for a chat room 
-and a wall room.
+and a wall room arguments.
 - python Main.py
 
 
