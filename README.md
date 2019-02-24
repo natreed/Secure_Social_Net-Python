@@ -3,7 +3,7 @@
 ### Copyright (c) 2018 Nathan Reed 
 ###     in collaboration with Professor Charles V. Wright (Porland State University)
 
-#Background: 
+## Background: 
 Secure Social Net is an application built on the Matrix API. The goal is to build new social networking features using the API in it's current form. The command line client is a way to focus on the features themselves and how they are structured. The next step will be to integrate these features into a web app.
 
 For more information on Matrix checkout [](https://matrix.org)
