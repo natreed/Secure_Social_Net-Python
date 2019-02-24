@@ -22,7 +22,7 @@ class SSNRoom(object):
     def _load(cls, **kwargs):
         raise NotImplementedError
 
-    def parse_room_name_or_id(self, allias_user_id_or_room_id):
+    def parse_room_name_or_id(self, alias_user_id_or_room_id):
         return allias_user_id_or_room_id.split(':')[0].lstrip('#')
 
     def set_room_name(self, name):

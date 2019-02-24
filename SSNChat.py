@@ -35,7 +35,7 @@ class SSNChat(SSNElement):
 
     def on_message(self, room, event):
         if event['type'] == "m.room.member":
-            if event['membership'] == "join":
+            if event['content']['membership'] == "join":
                 if self.is_room_setup and not self.rendered:
                     print("{0} joined".format(event['content']['displayname']))
                     self.rendered = True

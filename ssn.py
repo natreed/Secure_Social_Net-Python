@@ -14,7 +14,6 @@
 
 
 import sys
-import os
 from matrix_client.client import MatrixClient
 from matrix_client.errors import MatrixRequestError
 from requests.exceptions import MissingSchema
@@ -22,11 +21,8 @@ from SSNChat import SSNChat
 from SSNWall import SSNWall
 import json
 from ClientWall import ClientWall
-from WallRoom import WallRoom
 from time import sleep
 from FriendWall import FriendWall
-import subprocess
-import shlex
 
 class ssn():
     """ssn is the controller for different app elements"""
@@ -235,21 +231,9 @@ class ssn():
                         self.current_interface.current_room.room.send_text(msg)
 
     def run(self):
-
         self.current_interface.load(self.chat_landing_room)
         self.current_interface.m_client.start_listener_thread()
         self.listen()
 
 
-if __name__ == '__main__':
-    natreed_args = {"homeserver": 'http://www.matrix.org',
-                    "m_username": '@natreed:matrix.org',
-                    "pw": 'vatloc4evr',
-                    "chat_landing_room": '#my_room:matrix.org',
-                    "wall_landing_room": '#natreed_w:matrix.org'}
-    nat_reed_args = {"homeserver": 'http://www.matrix.org',
-                     "m_username": '@nat-reed:matrix.org',
-                     "pw": 'vatloc4evr',
-                     "chat_landing_room": '#nat-reed-chat:matrix.org',
-                     "wall_landing_room": '#nat-reed_wall:matrix.org'}
-    ssn(natreed_args).run()
+

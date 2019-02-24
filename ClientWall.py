@@ -16,7 +16,7 @@ class ClientWall(SSNWall):
         if not self.initialized:
             return
         if event['type'] == "m.room.member":
-            if event['membership'] == "join":
+            if event['content']['membership'] == "join":
                 if self.rendered and self.is_room_setup \
                         and self.current_room.get_room_id() not in self.loaded_rooms:
                     print("{0} joined".format(event['content']['displayname']))
